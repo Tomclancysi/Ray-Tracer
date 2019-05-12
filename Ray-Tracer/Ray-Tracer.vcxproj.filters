@@ -42,10 +42,10 @@
     <ClCompile Include="RayTracer\Ray.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="RayTracer\RayTracing.cpp">
+    <ClCompile Include="RayTracer\Hitable.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="RayTracer\Hitable.cpp">
+    <ClCompile Include="RayTracer\Tracer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,7 +80,7 @@
     <ClInclude Include="RayTracer\Ray.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="RayTracer\RayTracing.h">
+    <ClInclude Include="RayTracer\Tracer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

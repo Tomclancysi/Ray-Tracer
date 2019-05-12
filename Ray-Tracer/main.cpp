@@ -1,5 +1,5 @@
 #include <iostream>
-#include "RayTracer/RayTracing.h"
+#include "RayTracer/Tracer.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
@@ -9,7 +9,7 @@ using namespace RayTracer;
 
 int main()
 {
-	RayTracing tracer;
+	Tracer tracer;
 	tracer.initialize(800, 600);
 	tracer.setRecursionDepth(10);
 	unsigned char * ret = tracer.render();

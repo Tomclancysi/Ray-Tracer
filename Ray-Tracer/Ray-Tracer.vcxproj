@@ -137,7 +137,7 @@
     <ClCompile Include="RayTracer\Math\Vector3D.cpp" />
     <ClCompile Include="RayTracer\Math\Vector4D.cpp" />
     <ClCompile Include="RayTracer\Ray.cpp" />
-    <ClCompile Include="RayTracer\RayTracing.cpp" />
+    <ClCompile Include="RayTracer\Tracer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RayTracer\Camera.h" />
@@ -150,7 +150,7 @@
     <ClInclude Include="RayTracer\Math\Vector3D.h" />
     <ClInclude Include="RayTracer\Math\Vector4D.h" />
     <ClInclude Include="RayTracer\Ray.h" />
-    <ClInclude Include="RayTracer\RayTracing.h" />
+    <ClInclude Include="RayTracer\Tracer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

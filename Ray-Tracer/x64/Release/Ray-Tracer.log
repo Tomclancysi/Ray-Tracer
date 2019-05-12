@@ -1,31 +1,37 @@
-﻿  RayTracing.cpp
+﻿  main.cpp
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\math\mathutils.h(32): warning C4244: “初始化”: 从“unsigned __int64”转换到“unsigned int”，可能丢失数据
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\math\vector3d.h(86): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  Hitable.cpp
 c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\math\mathutils.h(32): warning C4244: “初始化”: 从“unsigned __int64”转换到“unsigned int”，可能丢失数据
 c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\math\vector3d.h(86): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
 c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\hitable.h(43): warning C4150: 删除指向不完整“RayTracer::Material”类型的指针；没有调用析构函数
   c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\hitable.h(17): note: 参见“RayTracer::Material”的声明
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(82): warning C4018: “>=”: 有符号/无符号不匹配
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(109): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(110): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(110): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(111): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(118): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(117): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(116): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(118): warning C4305: “参数”: 从“double”到“const float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(124): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(123): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(122): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(125): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(125): warning C4305: “参数”: 从“double”到“const float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(129): warning C4305: “参数”: 从“double”到“const float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(134): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\raytracing.cpp(135): warning C4305: “参数”: 从“double”到“float”截断
-  main.cpp
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\hitable.cpp(45): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
+  Tracer.cpp
 c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\math\mathutils.h(32): warning C4244: “初始化”: 从“unsigned __int64”转换到“unsigned int”，可能丢失数据
 c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\math\vector3d.h(86): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\hitable.h(43): warning C4150: 删除指向不完整“RayTracer::Material”类型的指针；没有调用析构函数
+  c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\hitable.h(17): note: 参见“RayTracer::Material”的声明
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(82): warning C4018: “>=”: 有符号/无符号不匹配
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(109): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(110): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(110): warning C4305: “参数”: 从“double”到“float”截断
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(111): warning C4305: “参数”: 从“double”到“float”截断
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(118): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(117): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(116): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(118): warning C4305: “参数”: 从“double”到“const float”截断
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(124): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(123): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(122): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(125): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(125): warning C4305: “参数”: 从“double”到“const float”截断
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(129): warning C4305: “参数”: 从“double”到“const float”截断
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(134): warning C4305: “参数”: 从“double”到“float”截断
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(135): warning C4305: “参数”: 从“double”到“float”截断
   正在生成代码
-  13 of 179 functions ( 7.3%) were compiled, the rest were copied from previous compilation.
-    9 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+  105 of 179 functions (58.7%) were compiled, the rest were copied from previous compilation.
+    13 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   Ray-Tracer.vcxproj -> C:\Users\ywc\Desktop\Ray-Tracer\x64\Release\Ray-Tracer.exe
