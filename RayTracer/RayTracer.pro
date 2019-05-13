@@ -41,7 +41,11 @@ SOURCES += \
     RunThread.cpp \
     RayTracer/AABB.cpp \
     RayTracer/BVHNode.cpp \
-    RayTracer/Texture.cpp
+    RayTracer/Texture.cpp \
+    RayTracer/MeshHitable.cpp \
+    RayTracer/Transform3D.cpp \
+    RayTracer/SimpleMeshHitable.cpp \
+    RayTracer/ModelHitable.cpp
 
 HEADERS += \
         Window.h \
@@ -60,7 +64,11 @@ HEADERS += \
     RunThread.h \
     RayTracer/AABB.h \
     RayTracer/BVHNode.h \
-    RayTracer/Texture.h
+    RayTracer/Texture.h \
+    RayTracer/MeshHitable.h \
+    RayTracer/Transform3D.h \
+    RayTracer/SimpleMeshHitable.h \
+    RayTracer/ModelHitable.h
 
 FORMS += \
         Window.ui \

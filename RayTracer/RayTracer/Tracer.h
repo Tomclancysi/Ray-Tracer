@@ -2,6 +2,7 @@
 #define RENDERER_H
 
 #include "Ray.h"
+#include <vector>
 
 /**
  * @projectName   RayTracer
@@ -29,6 +30,7 @@ namespace RayTracer
         };
         Setting m_config;
         unsigned char *m_image;
+        std::vector<Hitable*> m_list;
 
     public:
         Tracer();
@@ -49,13 +51,14 @@ namespace RayTracer
             float fovy, float aspect, float aperture, float focus_dist);
 
     private:
-        Hitable *randomScene();
-        Hitable *twoSpheresScene();
-        Hitable *simpleLightScene();
-        Hitable *cornellBoxScene();
+        void randomScene();
+        void twoSpheresScene();
+        void simpleLightScene();
 
         Vector4D tracing(const Ray &r, Hitable *world, int depth);
         void drawPixel(unsigned int x, unsigned int y, const Vector4D &color);
+
+        void clearHitableList();
     };
 
 }

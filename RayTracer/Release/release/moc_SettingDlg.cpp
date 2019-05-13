@@ -63,8 +63,8 @@ static const uint qt_meta_data_SettingDlg[] = {
        3,    0,   35,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    0,   36,    2, 0x08 /* Private */,
-       5,    0,   37,    2, 0x08 /* Private */,
+       4,    0,   36,    2, 0x0a /* Public */,
+       5,    0,   37,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,

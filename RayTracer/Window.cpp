@@ -69,6 +69,7 @@ void Window::runRayTracer()
     timer->start(1000);
     //tracer->render();
     //isRunning = false;
+    QMessageBox::information(this, "Tip", "Begin to render.");
 }
 
 void Window::finishedRayTracer()
@@ -76,6 +77,7 @@ void Window::finishedRayTracer()
     timer->stop();
     receiveFrame();
     setting->setTotalTime(runable->getTotalTime());
+    setting->on_savePushButton_clicked();
 }
 
 void Window::receiveFrame()

@@ -24,7 +24,7 @@ signals:
     void runRayTracer();
     void saveToImage();
 
-private slots:
+public slots:
     void on_renderPushButton_clicked();
     void on_savePushButton_clicked();
 
