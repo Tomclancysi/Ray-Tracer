@@ -50,8 +50,8 @@ namespace RayTracer
 				m_camera = nullptr;
 			}
 		};
-		Setting m_config;								// configuration.
-		Manager m_manager;								// manager component.
+		Setting m_config;								// Configuration.
+		Manager m_manager;								// Manager component.
 		BVHNode *m_root;								// BVH tree root node.
 		unsigned char *m_image;							// Render target.
 		std::vector<Hitable*> m_objects;				// Scene object lists.

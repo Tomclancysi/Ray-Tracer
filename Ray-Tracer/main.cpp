@@ -177,7 +177,7 @@ int main()
 	// initialize.
 	tracer.initialize(800, 600);
 	tracer.setRecursionDepth(50);
-	tracer.setSamplingNums(5);
+	tracer.setSamplingNums(1);
 
 	// create scene.
 	simpleLightScene();
@@ -190,9 +190,12 @@ int main()
 	unsigned char * ret = nullptr;
 	tracer.beginFrame();
 	{
+		cout << "4\n";
 		ret = tracer.render(totalTime);
+		cout << "5\n";
 	}
 	tracer.endFrame();
+	cout << "6\n";
 
 	// write to png image.
 	stbi_flip_vertically_on_write(1);

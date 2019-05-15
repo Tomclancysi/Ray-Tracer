@@ -31,7 +31,7 @@ namespace RayTracer
 	{
 		if (m_image) delete m_image;
 		m_image = nullptr;
-		endFrame();
+		//endFrame();
 	}
 
 	void Tracer::initialize(int w, int h, int c)
@@ -55,7 +55,7 @@ namespace RayTracer
 		m_image = new unsigned char[m_config.m_width * m_config.m_height * m_config.m_channel];
 
 		// clear something.
-		endFrame();
+		//endFrame();
 
 		// manager.
 		if (m_manager.m_textureMgr == nullptr)
@@ -72,22 +72,8 @@ namespace RayTracer
 	void Tracer::beginFrame()
 	{
 		for (int x = 0; x < m_objects.size(); ++x)
-		{
 			m_objects[x]->preRendering();
-		}
-		if (m_root) delete m_root;
 		m_root = new BVHNode(m_objects, 0, m_objects.size());
-	}
-
-	void Tracer::endFrame()
-	{
-		// clear scene objects.
-		BVHNode::destoryBVHTree(m_root);
-		for (int x = 0; x < m_objects.size(); ++x)
-		{
-			delete m_objects[x];
-			m_objects[x] = nullptr;
-		}
 	}
 
 	unsigned char *Tracer::render(double &totalTime)
@@ -110,6 +96,17 @@ namespace RayTracer
 		totalTime = m_config.totalFrameTime;
 
 		return m_image;
+	}
+
+	void Tracer::endFrame()
+	{
+		// clear scene objects.
+		BVHNode::destoryBVHTree(m_root);
+		for (int x = 0; x < m_objects.size(); ++x)
+		{
+			delete m_objects[x];
+			m_objects[x] = nullptr;
+		}
 	}
 
 	void Tracer::drawPixel(unsigned int x, unsigned int y, const Vector4D &color)

@@ -1,4 +1,4 @@
-﻿  main.cpp
+﻿  Tracer.cpp
 c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\math\mathutils.h(32): warning C4244: “初始化”: 从“unsigned __int64”转换到“unsigned int”，可能丢失数据
 c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\math\vector3d.h(87): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
 c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\math\vector3d.h(117): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
@@ -7,31 +7,14 @@ c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\texturemgr.h(36): warning C
 c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\materialmgr.h(36): warning C4267: “return”: 从“size_t”转换到“unsigned int”，可能丢失数据
 c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.h(49): warning C4150: 删除指向不完整“RayTracer::Camera”类型的指针；没有调用析构函数
   c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.h(20): note: 参见“RayTracer::Camera”的声明
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(33): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(34): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(34): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(35): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(44): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(43): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(42): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(44): warning C4305: “参数”: 从“double”到“const float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(53): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(52): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(51): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(54): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(54): warning C4305: “参数”: 从“double”到“const float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(57): warning C4305: “参数”: 从“double”到“const float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(64): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(67): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(129): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(130): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(131): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(134): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(135): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(137): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\ywc\desktop\ray-tracer\ray-tracer\main.cpp(147): warning C4305: “参数”: 从“double”到“float”截断
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(76): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(114): warning C4018: “>=”: 有符号/无符号不匹配
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(130): warning C4018: “<”: 有符号/无符号不匹配
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(156): warning C4018: “<”: 有符号/无符号不匹配
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(167): warning C4267: “参数”: 从“size_t”转换到“unsigned int”，可能丢失数据
+c:\users\ywc\desktop\ray-tracer\ray-tracer\raytracer\tracer.cpp(181): warning C4018: “<”: 有符号/无符号不匹配
   正在生成代码
-  0 of 1320 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  12 of 1320 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
