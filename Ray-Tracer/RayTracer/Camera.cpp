@@ -30,12 +30,13 @@ namespace RayTracer
 		} while (p.dotProduct(p) >= 1.0f);
 		return p;
 	}
+
 	void Camera::update()
 	{
 		const Vector3D worldUp(0.0f, 1.0f, 0.0f);
 		// frustum.
 		float theta = radians(m_fovy);
-		float half_height = static_cast<float>(tan(theta * 0.5f));
+		float half_height = static_cast<float>(tan(theta * 0.5f)) * m_focusDist;
 		float half_width = m_aspect * half_height;
 
 		// camera coordinate system.
@@ -47,9 +48,9 @@ namespace RayTracer
 		m_axisY.normalize();
 
 		// view port.
-		m_lowerLeftCorner = m_pos - m_axisX * half_width * m_focusDist
-			- m_axisY * half_height * m_focusDist - m_axisZ * m_focusDist;
-		m_horizontal = m_axisX * 2.0f * half_width * m_focusDist;
-		m_vertical = m_axisY * 2.0f * half_height * m_focusDist;
+		m_lowerLeftCorner = m_pos - m_axisX * half_width
+			- m_axisY * half_height - m_axisZ * m_focusDist;
+		m_horizontal = m_axisX * 2.0f * half_width;
+		m_vertical = m_axisY * 2.0f * half_height;
 	}
 }

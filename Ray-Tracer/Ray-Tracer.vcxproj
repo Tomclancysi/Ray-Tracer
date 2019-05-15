@@ -80,6 +80,8 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>../lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>tbb.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -92,6 +94,8 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>../lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>tbb.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -108,6 +112,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>../lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>tbb.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -124,33 +130,54 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>../lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>tbb.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="RayTracer\AABB.cpp" />
+    <ClCompile Include="RayTracer\BVHNode.cpp" />
     <ClCompile Include="RayTracer\Camera.cpp" />
     <ClCompile Include="RayTracer\Hitable.cpp" />
     <ClCompile Include="RayTracer\Material.cpp" />
+    <ClCompile Include="RayTracer\MaterialMgr.cpp" />
     <ClCompile Include="RayTracer\Math\Matrix4x4.cpp" />
     <ClCompile Include="RayTracer\Math\Quaternion.cpp" />
     <ClCompile Include="RayTracer\Math\Vector2D.cpp" />
     <ClCompile Include="RayTracer\Math\Vector3D.cpp" />
     <ClCompile Include="RayTracer\Math\Vector4D.cpp" />
+    <ClCompile Include="RayTracer\MeshHitable.cpp" />
+    <ClCompile Include="RayTracer\ModelHitable.cpp" />
     <ClCompile Include="RayTracer\Ray.cpp" />
+    <ClCompile Include="RayTracer\SimpleMeshHitable.cpp" />
+    <ClCompile Include="RayTracer\Texture.cpp" />
+    <ClCompile Include="RayTracer\TextureMgr.cpp" />
     <ClCompile Include="RayTracer\Tracer.cpp" />
+    <ClCompile Include="RayTracer\Transform3D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="RayTracer\AABB.h" />
+    <ClInclude Include="RayTracer\BVHNode.h" />
     <ClInclude Include="RayTracer\Camera.h" />
     <ClInclude Include="RayTracer\Hitable.h" />
     <ClInclude Include="RayTracer\Material.h" />
+    <ClInclude Include="RayTracer\MaterialMgr.h" />
     <ClInclude Include="RayTracer\Math\MathUtils.h" />
     <ClInclude Include="RayTracer\Math\Matrix4x4.h" />
     <ClInclude Include="RayTracer\Math\Quaternion.h" />
     <ClInclude Include="RayTracer\Math\Vector2D.h" />
     <ClInclude Include="RayTracer\Math\Vector3D.h" />
     <ClInclude Include="RayTracer\Math\Vector4D.h" />
+    <ClInclude Include="RayTracer\MeshHitable.h" />
+    <ClInclude Include="RayTracer\ModelHitable.h" />
     <ClInclude Include="RayTracer\Ray.h" />
+    <ClInclude Include="RayTracer\SimpleMeshHitable.h" />
+    <ClInclude Include="RayTracer\Singleton.h" />
+    <ClInclude Include="RayTracer\Texture.h" />
+    <ClInclude Include="RayTracer\TextureMgr.h" />
     <ClInclude Include="RayTracer\Tracer.h" />
+    <ClInclude Include="RayTracer\Transform3D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

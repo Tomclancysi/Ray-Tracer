@@ -26,7 +26,7 @@ namespace RayTracer
 		float m_lensRadius, m_focusDist;
 		Vector3D m_axisX, m_axisY, m_axisZ;
 
-		Camera(const Vector3D &cameraPos, const Vector3D &target,float vfov,
+		Camera(const Vector3D &cameraPos, const Vector3D &target, float vfov,
 			float aspect, float aperture, float focus_dist);
 
 		// Getter.

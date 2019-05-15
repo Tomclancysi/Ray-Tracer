@@ -2,6 +2,8 @@
 #define HITABLE_H
 
 #include "Ray.h"
+#include "AABB.h"
+#include "Math/Vector2D.h"
 #include <vector>
 
 /**
@@ -18,17 +20,28 @@ namespace RayTracer
 	struct HitRecord
 	{
 		float m_t;
+		Vector2D m_texcoord;
 		Vector3D m_position;
 		Vector3D m_normal;
-		Material *m_material;
+		unsigned int m_material;
+	};
+
+	struct Vertex
+	{
+		Vector3D m_position;
+		Vector3D m_normal;
+		Vector2D m_texcoord;
 	};
 
 	class Hitable
 	{
 	public:
 		Hitable() = default;
-		virtual ~Hitable() {}
+		virtual ~Hitable() = default;
+		virtual bool isLeaf() const { return true; }
+		virtual void preRendering() {}
 		virtual bool hit(const Ray &ray, const float &t_min, const float &t_max, HitRecord &ret) const = 0;
+		virtual bool boundingBox(const float &t0, const float &t1, AABB &box) const = 0;
 	};
 
 	class Sphere : public Hitable
@@ -36,36 +49,35 @@ namespace RayTracer
 	public:
 		float m_radius;
 		Vector3D m_center;
-		Material *m_material;
+		unsigned int m_material;
 
-		Sphere(const Vector3D &cen, const float r, Material *mat)
+		Sphere(const Vector3D &cen, const float r, unsigned int mat)
 			:m_center(cen), m_radius(r), m_material(mat) {}
-		~Sphere() { if (m_material)delete m_material; m_material = nullptr; };
+		virtual ~Sphere() = default;
 
 		virtual bool hit(const Ray &ray, const float &t_min, const float &t_max, HitRecord &ret) const;
+		virtual bool boundingBox(const float &t0, const float &t1, AABB &box) const;
 	};
 
-	class HitableList : public Hitable
+	class TTriangle : public Hitable
 	{
 	public:
-		std::vector<Hitable*> m_list;
+		Vector3D m_normal;
+		Vector3D m_p0, m_p1, m_p2;
+		unsigned int m_material;
 
-		HitableList() = default;
-		~HitableList() = default;
-
-		void addHitable(Hitable *target) { m_list.push_back(target); }
-
-		void clearHitable()
+		TTriangle(Vector3D p0, Vector3D p1, Vector3D p2, unsigned int mat)
+			:m_p0(p0), m_p1(p1), m_p2(p2), m_material(mat)
 		{
-			for (int x = 0; x < m_list.size(); ++x)
-			{
-				delete m_list[x];
-				m_list[x] = nullptr;
-			}
+			m_normal = (p1 - p0).crossProduct(p2 - p0);
+			m_normal.normalize();
 		}
+		virtual ~TTriangle() = default;
 
 		virtual bool hit(const Ray &ray, const float &t_min, const float &t_max, HitRecord &ret) const;
+		virtual bool boundingBox(const float &t0, const float &t1, AABB &box) const;
 	};
+
 }
 
 #endif // HITABLE_H

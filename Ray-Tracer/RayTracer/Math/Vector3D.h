@@ -2,6 +2,7 @@
 #define VECTOR3D_H
 
 #include "MathUtils.h"
+#include "Vector2D.h"
 
 /**
  * @projectName   SoftRenderer
@@ -98,7 +99,7 @@ namespace RayTracer
 		{
 			Vector3D uv = ray;
 			uv.normalize();
-			float dt = uv.dotProduct(normal);
+			float dt = (uv).dotProduct(normal);
 			float discriminant = 1.0f - niOvernt * niOvernt * (1.0f - dt * dt);
 			if (discriminant > 0.0f)
 			{
@@ -107,6 +108,14 @@ namespace RayTracer
 			}
 			else
 				return false;
+		}
+
+		static void getSphereUV(const Vector3D &p, Vector2D &tex)
+		{
+			float phi = atan2(p.z, p.x);
+			float theta = asin(p.y);
+			tex.x = 1 - (phi + M_PI) / (2 * M_PI);
+			tex.y = (theta + M_PI / 2) / M_PI;
 		}
 	};
 

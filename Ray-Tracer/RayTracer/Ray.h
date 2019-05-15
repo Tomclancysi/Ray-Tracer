@@ -24,7 +24,8 @@ namespace RayTracer
 		Ray() = default;
 		~Ray() = default;
 		Ray(const Vector3D &org, const Vector3D &dir)
-			:m_origin(org), m_direction(dir) {
+			:m_origin(org), m_direction(dir)
+		{
 			m_direction.normalize();
 		}
 

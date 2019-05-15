@@ -1,5 +1,7 @@
 #include "Material.h"
 
+#include "TextureMgr.h"
+
 namespace RayTracer
 {
 	bool Lambertian::scatter(const Ray &in, const HitRecord &rec,
@@ -7,7 +9,7 @@ namespace RayTracer
 	{
 		Vector3D target = rec.m_position + rec.m_normal + Vector3D::randomInUnitSphere();
 		scattered = Ray(rec.m_position, target - rec.m_position);
-		attenuation = m_albedo;
+		attenuation = TextureMgr::getSingleton()->getTexture(m_albedo)->sample(rec.m_texcoord.x, rec.m_texcoord.y, rec.m_position);
 		return true;
 	}
 
@@ -16,7 +18,7 @@ namespace RayTracer
 	{
 		Vector3D reflectedDir = Vector3D::reflect(in.getDirection(), rec.m_normal);
 		scattered = Ray(rec.m_position, reflectedDir + Vector3D::randomInUnitSphere() * m_fuzz);
-		attenuation = m_albedo;
+		attenuation = TextureMgr::getSingleton()->getTexture(m_albedo)->sample(rec.m_texcoord.x, rec.m_texcoord.y, rec.m_position);
 		return (scattered.getDirection().dotProduct(rec.m_normal) > 0.0f);
 	}
 
@@ -30,12 +32,14 @@ namespace RayTracer
 		Vector3D refracted;
 		float reflect_prob;
 		float cosine;
+		// from inside to outside.
 		if (in.getDirection().dotProduct(rec.m_normal) > 0.0f)
 		{
 			outward_normal = -rec.m_normal;
 			ni_over_nt = refIdx;
-			cosine = refIdx * in.getDirection().dotProduct(rec.m_normal) / in.getDirection().getLength();
+			cosine = /*refIdx * */in.getDirection().dotProduct(rec.m_normal) / in.getDirection().getLength();
 		}
+		// from outside to inside.
 		else
 		{
 			outward_normal = rec.m_normal;
@@ -57,5 +61,10 @@ namespace RayTracer
 		else
 			scattered = Ray(rec.m_position, refracted);
 		return true;
+	}
+
+	Vector3D DiffuseLight::emitted(const float & u, const float & v, const Vector3D & p) const
+	{
+		return TextureMgr::getSingleton()->getTexture(m_emitTex)->sample(u, v, p);
 	}
 }

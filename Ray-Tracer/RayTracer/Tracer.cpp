@@ -6,16 +6,24 @@
 #include "Hitable.h"
 #include "Camera.h"
 #include "Material.h"
+#include "BVHNode.h"
+#include "Texture.h"
+#include "SimpleMeshHitable.h"
+#include "ModelHitable.h"
 
 #include <random>
+#include <time.h>
+
+#include "tbb/parallel_for.h"
 
 using namespace std;
+using namespace tbb;
 
 namespace RayTracer
 {
 
 	Tracer::Tracer()
-		:m_image(nullptr)
+		:m_image(nullptr), m_root(nullptr)
 	{
 	}
 
@@ -23,57 +31,84 @@ namespace RayTracer
 	{
 		if (m_image) delete m_image;
 		m_image = nullptr;
+		endFrame();
 	}
 
 	void Tracer::initialize(int w, int h, int c)
 	{
+		// Image width and height.
 		m_config.m_width = w;
 		m_config.m_height = h;
 		if (m_image != nullptr) delete m_image;
-		m_image = new unsigned char[m_config.m_width * m_config.m_height * m_config.m_channel];
-	}
+		if (m_config.m_camera != nullptr) delete m_config.m_camera;
 
-	unsigned char *Tracer::render()
-	{
-		// viewport
-		Vector3D lower_left_corner(-2.0, -1.0, -1.0);
-		Vector3D horizontal(4.0, 0.0, 0.0);
-		Vector3D vertical(0.0, 2.0, 0.0);
-		Vector3D origin(0.0, 0.0, 0.0);
-
-		// scene
-		Hitable* world = randomScene();
-
-		// camera
-		Vector3D lookfrom(3, 4, 10);
+		// Camera initialization.
+		Vector3D lookfrom(0, 6, 21);
 		Vector3D lookat(0, 0, 0);
 		float dist_to_focus = 10.0f;
-		float aperture = 0.1f;
-		Camera camera(lookfrom, lookat, 45,
-			static_cast<float>(m_config.m_width) / m_config.m_height, aperture, dist_to_focus);
-		int samples = 50;
+		float aperture = 0.0f;
+		m_config.m_camera = new Camera(lookfrom, lookat, 45,
+			static_cast<float>(m_config.m_width) / m_config.m_height,
+			aperture, dist_to_focus);
 
-		for (int row = m_config.m_height - 1; row >= 0; --row)
+		// Image buffer.
+		m_image = new unsigned char[m_config.m_width * m_config.m_height * m_config.m_channel];
+
+		// clear something.
+		endFrame();
+
+		// manager.
+		if (m_manager.m_textureMgr == nullptr)
+			m_manager.m_textureMgr = TextureMgr::getSingleton();
+		if (m_manager.m_materialMgr == nullptr)
+			m_manager.m_materialMgr = MaterialMgr::getSingleton();
+	}
+
+	void Tracer::addObjects(Hitable * target)
+	{
+		m_objects.push_back(target);
+	}
+
+	void Tracer::beginFrame()
+	{
+		for (int x = 0; x < m_objects.size(); ++x)
 		{
-			for (int col = 0; col < m_config.m_width; ++col)
-			{
-				Vector4D color;
-				for (int sps = 0; sps < samples; ++sps)
-				{
-					float u = static_cast<float>(col + drand48()) / static_cast<float>(m_config.m_width);
-					float v = static_cast<float>(row + drand48()) / static_cast<float>(m_config.m_height);
-					Ray ray = camera.getRay(u, v);
-					color += tracing(ray, world, 0);
-				}
-				color /= static_cast<float>(samples);
-				color.w = 1.0f;
-				// gamma correction.
-				color = Vector4D(sqrt(color.x), sqrt(color.y), sqrt(color.z), color.w);
-				drawPixel(col, row, color);
-			}
+			m_objects[x]->preRendering();
 		}
-		reinterpret_cast<HitableList*>(world)->clearHitable();
-		delete world;
+		if (m_root) delete m_root;
+		m_root = new BVHNode(m_objects, 0, m_objects.size());
+	}
+
+	void Tracer::endFrame()
+	{
+		// clear scene objects.
+		BVHNode::destoryBVHTree(m_root);
+		for (int x = 0; x < m_objects.size(); ++x)
+		{
+			delete m_objects[x];
+			m_objects[x] = nullptr;
+		}
+	}
+
+	unsigned char *Tracer::render(double &totalTime)
+	{
+		m_config.startFrame = clock();
+
+		Hitable* hitableNode = reinterpret_cast<Hitable*>(m_root);
+
+		if (m_config.m_parallelForCpu == 1)
+		{
+			parallelThreadRender(hitableNode);
+		}
+		else
+		{
+			rawSerialRender(hitableNode);
+		}
+
+		m_config.endFrame = clock();
+		m_config.totalFrameTime = static_cast<double>(m_config.endFrame - m_config.startFrame) / CLOCKS_PER_SEC;
+		totalTime = m_config.totalFrameTime;
+
 		return m_image;
 	}
 
@@ -88,52 +123,53 @@ namespace RayTracer
 		m_image[index + 3] = static_cast<unsigned char>(255 * color.w);
 	}
 
-	void Tracer::setRecursionDepth(int depth)
+	void Tracer::rawSerialRender(Hitable *scene)
 	{
-		m_config.m_maxDepth = depth;
-	}
-
-	void Tracer::setCamera(const Vector3D & cameraPos, const Vector3D & target, const Vector3D & worldUp, float fovy, float aspect, float aperture, float focus_dist)
-	{
-	}
-
-	Hitable *Tracer::randomScene()
-	{
-		int n = 500;
-		HitableList *list = new HitableList();
-		list->addHitable(new Sphere(Vector3D(0, -1000.0, 0), 1000, new Lambertian(Vector3D(0.5, 0.5, 0.5))));
-		for (int a = -11; a < 11; ++a)
+		for (int row = m_config.m_height - 1; row >= 0; --row)
 		{
-			for (int b = -11; b < 11; ++b)
+			for (int col = 0; col < m_config.m_width; ++col)
 			{
-				float choose_mat = drand48();
-				Vector3D center(a + 0.9*drand48(), 0.2, b + 0.9*drand48());
-				if ((center - Vector3D(4, 0.2, 0)).getLength() > 0.9)
+				Vector4D color;
+				for (int sps = 0; sps < m_config.m_samplings; ++sps)
 				{
-					// diffuse.
-					if (choose_mat < 0.4f)
-						list->addHitable(new Sphere(center, 0.2, new Lambertian
-						(Vector3D(drand48()*drand48(),
-							drand48()*drand48(),
-							drand48()*drand48()))));
-					// metal
-					else if (choose_mat < 0.6f)
-						list->addHitable(new Sphere(center, 0.2, new Metal
-						(Vector3D(0.5f*(1.0f + drand48()),
-							0.5f*(1.0f + drand48()),
-							0.5f*(1.0f + drand48())),
-							0.5f*drand48())));
-					// glass
-					else
-						list->addHitable(new Sphere(center, 0.2, new Dielectric
-						(1.5f)));
+					float u = static_cast<float>(col + drand48()) / static_cast<float>(m_config.m_width);
+					float v = static_cast<float>(row + drand48()) / static_cast<float>(m_config.m_height);
+					Ray ray = m_config.m_camera->getRay(u, v);
+					color += tracing(ray, scene, 0);
 				}
+				color /= static_cast<float>(m_config.m_samplings);
+				color.w = 1.0f;
+				// gamma correction.
+				color = Vector4D(sqrt(color.x), sqrt(color.y), sqrt(color.z), color.w);
+				drawPixel(col, row, color);
 			}
 		}
-		list->addHitable(new Sphere(Vector3D(0, 1, 0), 1.0, new Dielectric(1.5f)));
-		list->addHitable(new Sphere(Vector3D(-4, 1, 0), 1.0, new Lambertian(Vector3D(0.4, 0.2, 0.1))));
-		list->addHitable(new Sphere(Vector3D(4, 1, 0), 1.0, new Metal(Vector3D(0.7, 0.6, 0.5), 0.0f)));
-		return list;
+	}
+
+	void Tracer::parallelThreadRender(Hitable *scene)
+	{
+		parallel_for(blocked_range<size_t>(0, m_config.m_height * m_config.m_width, 10000),
+			[&](blocked_range<size_t>& r)
+		{
+			for (size_t i = r.begin(); i != r.end(); ++i)
+			{
+				Vector4D color;
+				size_t col = i % m_config.m_width;
+				size_t row = i / m_config.m_width;
+				for (int x = 0; x < m_config.m_samplings; ++x)
+				{
+					float u = static_cast<float>(col + drand48()) / static_cast<float>(m_config.m_width);
+					float v = static_cast<float>(row + drand48()) / static_cast<float>(m_config.m_height);
+					Ray ray = m_config.m_camera->getRay(u, v);
+					color += tracing(ray, scene, 0);
+				}
+				color /= static_cast<float>(m_config.m_samplings);
+				color.w = 1.0f;
+				// gamma correction.
+				color = Vector4D(sqrt(color.x), sqrt(color.y), sqrt(color.z), color.w);
+				drawPixel(col, row, color);
+			}
+		}, auto_partitioner());
 	}
 
 	Vector4D Tracer::tracing(const Ray &r, Hitable *world, int depth)
@@ -143,12 +179,12 @@ namespace RayTracer
 		{
 			Ray scattered;
 			Vector3D attenuation;
-			if (depth < m_config.m_maxDepth && rec.m_material->scatter(r, rec, attenuation, scattered))
-				return attenuation * tracing(scattered, world, depth + 1);
+			Material::ptr material = m_manager.m_materialMgr->getMaterial(rec.m_material);
+			Vector3D emitted = material->emitted(rec.m_texcoord.x, rec.m_texcoord.y, rec.m_position);
+			if (depth < m_config.m_maxDepth && material->scatter(r, rec, attenuation, scattered))
+				return emitted + attenuation * tracing(scattered, world, depth + 1);
 			else
-				return Vector4D(0.0f, 0.0f, 0.0f, 1.0f);
-			//return backgroundColor(Ray(rec.m_position, target - rec.m_position), world) * 0.5f;
-			//return rec.normal * 0.5f + Vector3D(0.5f, 0.5f, 0.5f);
+				return emitted;
 		}
 		else
 		{
@@ -156,20 +192,7 @@ namespace RayTracer
 			Vector4D ret = Vector3D(1.0f, 1.0f, 1.0f) * (1.0f - t) + Vector3D(0.5f, 0.7f, 1.0f) * t;
 			ret.w = 1.0f;
 			return ret;
+			//return Vector4D(0.0f, 0.0f, 0.0f, 1.0f);
 		}
 	}
-
-	float Tracer::hitSphere(const Vector3D &center, const float &radius, const Ray &ray)
-	{
-		Vector3D oc = ray.getOrigin() - center;
-		float a = ray.getDirection().dotProduct(ray.getDirection());
-		float b = oc.dotProduct(ray.getDirection()) * 2.0f;
-		float c = oc.dotProduct(oc) - radius * radius;
-		float discriminant = b * b - 4.0f * a * c;
-		if (discriminant < 0.0f)
-			return -1.0f;
-		else
-			return (-b - sqrt(discriminant)) / (2.0f * a);
-	}
-
 }
