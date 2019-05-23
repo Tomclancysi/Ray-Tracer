@@ -17,11 +17,18 @@
 namespace RayTracer
 {
 
+	class Skybox;
 	class Camera;
 	class Hitable;
 	class Vector3D;
 	class Vector4D;
 	class BVHNode;
+
+	enum Background
+	{
+		PURE = 0, LERP = 1, SKYBOX = 2
+	};
+
 	class Tracer
 	{
 	private:
@@ -37,23 +44,26 @@ namespace RayTracer
 		public:
 			Camera *m_camera;
 			int m_parallelForCpu;
+			Background m_background;
 			unsigned int m_maxDepth;
 			unsigned int m_samplings;
 			int m_width, m_height, m_channel;
 			double startFrame, endFrame, totalFrameTime;
 
 			Setting() :m_maxDepth(50), m_samplings(10),
-				m_channel(4), m_camera(nullptr), m_parallelForCpu(1) {}
+				m_channel(4), m_camera(nullptr), m_parallelForCpu(1), m_background(PURE) {}
 			~Setting()
 			{
 				if (m_camera)delete m_camera;
 				m_camera = nullptr;
 			}
 		};
-		Setting m_config;								// Configuration.
-		Manager m_manager;								// Manager component.
+		Skybox *m_skyBox;                                 // Sky box.
 		BVHNode *m_root;								// BVH tree root node.
+		Setting m_config;								// configuration.
+		Manager m_manager;								// manager component.
 		unsigned char *m_image;							// Render target.
+		HitableList m_samplingList;                     // Important sampling list.
 		std::vector<Hitable*> m_objects;				// Scene object lists.
 
 	public:
@@ -75,19 +85,24 @@ namespace RayTracer
 		TextureMgr::ptr getTextureMgr() const { return m_manager.m_textureMgr; }
 		MaterialMgr::ptr getMaterialMgr() const { return m_manager.m_materialMgr; }
 
+		void addImportantSampling(Hitable *target);
 		void addObjects(Hitable *target);
 		void initialize(int w, int h, int c = 4);
+		void setSkybox(const std::vector<unsigned int> &texUnits);
+		void setSkybox(const std::string &path, const std::string &postfix);
 		void beginFrame();
 		void endFrame();
 
 		unsigned char *render(double &totalTime);
 
 	private:
-		Vector4D tracing(const Ray &r, Hitable *world, int depth);
+		Vector4D tracing(const Ray &r, Hitable *world, Hitable *light, int depth);
 		void drawPixel(unsigned int x, unsigned int y, const Vector4D &color);
 
 		void rawSerialRender(Hitable *scene);
 		void parallelThreadRender(Hitable *scene);
+
+		Vector3D deNan(const Vector3D &c);
 	};
 
 }

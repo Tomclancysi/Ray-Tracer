@@ -1,5 +1,7 @@
 #include "Hitable.h"
 
+#include "ONB.h"
+
 namespace RayTracer
 {
 
@@ -39,9 +41,31 @@ namespace RayTracer
 
 	bool Sphere::boundingBox(const float &t0, const float &t1, AABB &box) const
 	{
-		box = AABB(m_center - Vector3D(m_radius, m_radius, m_radius),
-			m_center + Vector3D(m_radius, m_radius, m_radius));
+		box = AABB(m_center - Vector3D(fabs(m_radius), fabs(m_radius), fabs(m_radius)),
+			m_center + Vector3D(fabs(m_radius), fabs(m_radius), fabs(m_radius)));
 		return true;
+	}
+
+	float Sphere::pdfValue(const Vector3D &o, const Vector3D &v) const
+	{
+		HitRecord rec;
+		if (this->hit(Ray(o, v), 0.001f, FLT_MAX, rec))
+		{
+			float cos_theta_max = sqrt(1 - m_radius * m_radius / (m_center - o).getSquaredLength());
+			float solid_angle = 2 * M_PI * (1 - cos_theta_max);
+			return 1.0f / solid_angle;
+		}
+		else
+			return 0.0f;
+	}
+
+	Vector3D Sphere::random(const Vector3D &o) const
+	{
+		Vector3D dir = m_center - o;
+		float distance_squared = dir.getSquaredLength();
+		ONB uvw;
+		uvw.buildFromW(dir);
+		return uvw.local(Vector3D::randomToSphere(m_radius, distance_squared));
 	}
 
 	bool TTriangle::hit(const Ray &ray, const float &t_min, const float &t_max, HitRecord &ret) const
@@ -86,6 +110,56 @@ namespace RayTracer
 		maxp.z = fmax(m_p0.z, fmax(m_p1.z, m_p2.z));
 		box = AABB(minp, maxp);
 		return true;
+	}
+
+	bool HitableList::hit(const Ray &ray, const float &t_min, const float &t_max, HitRecord &ret) const
+	{
+		HitRecord temp_rec;
+		bool hit_anything = false;
+		double closest_so_far = t_max;
+		for (int i = 0; i < m_list.size(); i++) {
+			if (m_list[i]->hit(ray, t_min, closest_so_far, temp_rec))
+			{
+				hit_anything = true;
+				closest_so_far = temp_rec.m_t;
+				ret = temp_rec;
+			}
+		}
+		return hit_anything;
+	}
+
+	bool HitableList::boundingBox(const float &t0, const float &t1, AABB &box) const
+	{
+		if (m_list.size() < 1) return false;
+		AABB temp_box;
+		bool first_true = m_list[0]->boundingBox(t0, t1, temp_box);
+		if (!first_true)
+			return false;
+		else
+			box = temp_box;
+		for (int i = 1; i < m_list.size(); i++)
+		{
+			if (m_list[0]->boundingBox(t0, t1, temp_box))
+				box = AABB::surroundingBox(box, temp_box);
+			else
+				return false;
+		}
+		return true;
+	}
+
+	float HitableList::pdfValue(const Vector3D &o, const Vector3D &v) const
+	{
+		float weight = 1.0f / m_list.size();
+		float sum = 0;
+		for (int x = 0; x < m_list.size(); ++x)
+			sum += m_list[x]->pdfValue(o, v);
+		return sum * weight;
+	}
+
+	Vector3D HitableList::random(const Vector3D &o) const
+	{
+		int index = static_cast<int>(drand48() * m_list.size());
+		return m_list[index]->random(o);
 	}
 
 }

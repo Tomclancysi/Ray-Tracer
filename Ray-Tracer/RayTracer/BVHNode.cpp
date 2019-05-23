@@ -18,7 +18,6 @@ namespace RayTracer
 		else if (axis == 2)
 			sort(&list[start], &list[end], boxCompareZ);
 		int length = end - start;
-		m_left = m_right = nullptr;
 		if (length == 1)
 			m_left = m_right = list[start];
 		else if (length == 2)
@@ -34,7 +33,7 @@ namespace RayTracer
 		// bounding box.
 		AABB boxLeft, boxRight;
 		if (!m_left->boundingBox(0, 0, boxLeft) || !m_right->boundingBox(0, 0, boxRight))
-			std::cerr << "No bounding box in BVHNode constructor\n";
+			std::cerr << "no bounding box in BVHNode constructor\n";
 		m_box = AABB::surroundingBox(boxLeft, boxRight);
 	}
 
@@ -80,13 +79,13 @@ namespace RayTracer
 
 	void BVHNode::destoryBVHTree(Hitable *root)
 	{
-		if (!root || root->isLeaf())
+		if (root == nullptr || root->isLeaf())
 			return;
 		BVHNode *broot = reinterpret_cast<BVHNode*>(root);
 		destoryBVHTree(broot->m_left);
 		destoryBVHTree(broot->m_right);
 		delete broot;
-		root = broot = nullptr;
+		root = nullptr;
 	}
 
 }

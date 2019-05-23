@@ -173,4 +173,34 @@ namespace RayTracer
 		m_material = mat;
 	}
 
+	Vector3D Plane::random(const Vector3D &o) const
+	{
+		Vector3D center = m_transformation.translation();
+		Vector3D leftCorner;
+		float width = m_transformation.scale().x * 2.0f;
+		float height = m_transformation.scale().z * 2.0f;
+		leftCorner.x = center.x - m_transformation.scale().x;
+		leftCorner.z = center.z - m_transformation.scale().z;
+		leftCorner.y = center.y;
+		Vector3D random_point(leftCorner.x + drand48() * width, leftCorner.y,
+			leftCorner.z + drand48() * height);
+		return random_point - o;
+	}
+
+	float Plane::pdfValue(const Vector3D &o, const Vector3D &v) const
+	{
+
+		HitRecord rec;
+		if (this->hit(Ray(o, v), 0.001f, FLT_MAX, rec))
+		{
+			float area = m_transformation.scale().x * 2.0f * m_transformation.scale().z * 2.0f;
+			float distance_squared = v.getSquaredLength();
+			float cosine = fabs(v.dotProduct(rec.m_normal) / v.getLength());
+			float ret = distance_squared / (cosine * area);
+			return ret;
+		}
+		else
+			return 0.0f;
+	}
+
 }

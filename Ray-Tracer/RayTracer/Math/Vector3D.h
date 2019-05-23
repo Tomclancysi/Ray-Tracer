@@ -89,6 +89,17 @@ namespace RayTracer
 			return pos;
 		}
 
+		static Vector3D randomToSphere(float radius, float distance_squared)
+		{
+			float r1 = drand48();
+			float r2 = drand48();
+			float z = 1 + r2 * (sqrt(1 - radius * radius / distance_squared) - 1);
+			float phi = 2 * M_PI * r1;
+			float x = cos(phi) * sqrt(1 - z * z);
+			float y = sin(phi) * sqrt(1 - z * z);
+			return Vector3D(x, y, z);
+		}
+
 		static Vector3D reflect(const Vector3D &ray, const Vector3D &normal)
 		{
 			return ray - normal * (ray.dotProduct(normal)) * 2.0f;
@@ -116,6 +127,17 @@ namespace RayTracer
 			float theta = asin(p.y);
 			tex.x = 1 - (phi + M_PI) / (2 * M_PI);
 			tex.y = (theta + M_PI / 2) / M_PI;
+		}
+
+		static Vector3D randomCosineDir()
+		{
+			float r1 = drand48();
+			float r2 = drand48();
+			float z = sqrt(1 - r2);
+			float phi = 2 * M_PI * r1;
+			float x = cos(phi) * 2 * sqrt(r2);
+			float y = sin(phi) * 2 * sqrt(r2);
+			return Vector3D(x, y, z);
 		}
 	};
 

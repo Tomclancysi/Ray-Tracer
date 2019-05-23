@@ -4,6 +4,7 @@
 #include "Ray.h"
 #include "Hitable.h"
 #include "Texture.h"
+#include <memory>
 
 /**
  * @projectName   RayTracer
@@ -14,6 +15,14 @@
 
 namespace RayTracer
 {
+	class PDF;
+	struct ScatterRecord
+	{
+		Ray m_scatterRay;
+		bool m_isSpecular;
+		Vector3D m_attenuation;
+		std::shared_ptr<PDF> m_pdf;
+	};
 
 	class Material
 	{
@@ -23,10 +32,19 @@ namespace RayTracer
 		Material() = default;
 		virtual ~Material() = default;
 
-		virtual bool scatter(const Ray &in, const HitRecord &rec,
-			Vector3D &attenuation, Ray &scattered) const = 0;
+		virtual bool scatter(const Ray &in, const HitRecord &rec, ScatterRecord &srec) const
+		{
+			return false;
+		}
 
-		virtual Vector3D emitted(const float &u, const float &v, const Vector3D &p) const
+		virtual float scattering_pdf(const Ray &in, const HitRecord &rec,
+			const Ray &scattered) const
+		{
+			return 1.0f;
+		}
+
+		virtual Vector3D emitted(const Ray &in, const HitRecord &rec, const float &u,
+			const float &v, const Vector3D &p) const
 		{
 			return Vector3D(0.0f, 0.0f, 0.0f);
 		}
@@ -43,8 +61,11 @@ namespace RayTracer
 		Lambertian(unsigned int a) : m_albedo(a) {}
 		virtual ~Lambertian() = default;
 
-		virtual bool scatter(const Ray &in, const HitRecord &rec,
-			Vector3D &attenuation, Ray &scattered) const;
+		virtual bool scatter(const Ray &in, const HitRecord &rec, ScatterRecord &srec) const;
+
+		virtual float scattering_pdf(const Ray &in, const HitRecord &rec,
+			const Ray &scattered) const;
+
 	};
 
 	class Metal : public Material
@@ -56,12 +77,13 @@ namespace RayTracer
 	public:
 		typedef std::shared_ptr<Metal> ptr;
 
-		Metal(unsigned int a, const float &f) : m_albedo(a), m_fuzz(f) 
-		{ if (f > 1.0f)m_fuzz = 1.0f; }
+		Metal(unsigned int a, const float &f) : m_albedo(a), m_fuzz(f)
+		{
+			if (f > 1.0f)m_fuzz = 1.0f;
+		}
 		virtual ~Metal() = default;
 
-		virtual bool scatter(const Ray &in, const HitRecord &rec,
-			Vector3D &attenuation, Ray &scattered) const;
+		virtual bool scatter(const Ray &in, const HitRecord &rec, ScatterRecord &srec) const;
 	};
 
 	class Dielectric : public Material
@@ -82,8 +104,7 @@ namespace RayTracer
 		Dielectric(float ri) : refIdx(ri) {}
 		virtual ~Dielectric() = default;
 
-		virtual bool scatter(const Ray &in, const HitRecord &rec,
-			Vector3D &attenuation, Ray &scattered) const;
+		virtual bool scatter(const Ray &in, const HitRecord &rec, ScatterRecord &srec) const;
 	};
 
 	class DiffuseLight : public Material
@@ -96,10 +117,13 @@ namespace RayTracer
 
 		DiffuseLight(unsigned int a) : m_emitTex(a) { }
 
-		virtual bool scatter(const Ray &in, const HitRecord &rec,
-			Vector3D &attenuation, Ray &scattered) const { return false; }
+		virtual bool scatter(const Ray &in, const HitRecord &rec, ScatterRecord &srec) const
+		{
+			return false;
+		}
 
-		virtual Vector3D emitted(const float &u, const float &v, const Vector3D &p) const;
+		virtual Vector3D emitted(const Ray &in, const HitRecord &rec, const float &u,
+			const float &v, const Vector3D &p) const;
 	};
 
 }

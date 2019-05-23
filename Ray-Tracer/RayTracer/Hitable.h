@@ -42,6 +42,9 @@ namespace RayTracer
 		virtual void preRendering() {}
 		virtual bool hit(const Ray &ray, const float &t_min, const float &t_max, HitRecord &ret) const = 0;
 		virtual bool boundingBox(const float &t0, const float &t1, AABB &box) const = 0;
+		virtual float pdfValue(const Vector3D &o, const Vector3D &v) const { return 0.0f; }
+		virtual Vector3D random(const Vector3D &o) const { return Vector3D(1.0f, 0.0f, 0.0f); }
+		virtual std::string getName() const { return "Hitable"; }
 	};
 
 	class Sphere : public Hitable
@@ -57,6 +60,8 @@ namespace RayTracer
 
 		virtual bool hit(const Ray &ray, const float &t_min, const float &t_max, HitRecord &ret) const;
 		virtual bool boundingBox(const float &t0, const float &t1, AABB &box) const;
+		virtual float pdfValue(const Vector3D &o, const Vector3D &v) const;
+		virtual Vector3D random(const Vector3D &o) const;
 	};
 
 	class TTriangle : public Hitable
@@ -76,6 +81,23 @@ namespace RayTracer
 
 		virtual bool hit(const Ray &ray, const float &t_min, const float &t_max, HitRecord &ret) const;
 		virtual bool boundingBox(const float &t0, const float &t1, AABB &box) const;
+
+	};
+
+	class HitableList : public Hitable
+	{
+	private:
+		std::vector<Hitable*> m_list;
+
+	public:
+		HitableList() = default;
+		virtual bool hit(const Ray &ray, const float &t_min, const float &t_max, HitRecord &ret) const;
+		virtual bool boundingBox(const float &t0, const float &t1, AABB &box) const;
+		virtual float pdfValue(const Vector3D &o, const Vector3D &v) const;
+		virtual Vector3D random(const Vector3D &o) const;
+
+		bool isEmpty() const { return m_list.empty(); }
+		void addObjects(Hitable *target) { m_list.push_back(target); }
 	};
 
 }
