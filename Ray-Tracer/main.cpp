@@ -340,8 +340,8 @@ int main()
 	//simpleLightScene();
 	//randomScene();
 	//twoSpheresScene();
-	//cornellBoxScene();
-	finalLightScene();
+	cornellBoxScene();
+	//finalLightScene();
 	//Camera *camera = tracer.getCamera();
 
 	// render.
