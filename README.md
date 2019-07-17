@@ -1,6 +1,6 @@
 # Ray-Tracer
 
-A offline renderer : path tracer. Just a personal toy for learning and playing.
+An offline renderer : path tracer. Just a personal toy for learning and playing.
 
 ## Gallery
 
