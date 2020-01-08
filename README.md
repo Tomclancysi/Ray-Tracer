@@ -2,7 +2,6 @@
 
 An offline renderer : path tracer. Just a personal toy for learning and playing.
 
-<<<<<<< HEAD
 
 
 ## Features
@@ -21,8 +20,6 @@ An offline renderer : path tracer. Just a personal toy for learning and playing.
 
 
 
-=======
->>>>>>> bc85acb4482ced58694e728bccc2dfaff2f25f04
 ## Gallery
 
 ![result.png](https://github.com/ZeusYang/Ray-Tracer/blob/master/picture/ret1.png)
