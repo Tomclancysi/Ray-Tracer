@@ -61,27 +61,64 @@ namespace RayTracer
 			m_faceNormal.push_back(normal);
 		}
 		m_box = AABB(minPoint, maxPoint);
+
+		//! if the number of triangles is more than a threshold, build a octree for 
+		if (m_indices.size() > 100 * 3)
+		{
+			m_octree = std::shared_ptr<Octree>(new Octree(minPoint, maxPoint));
+			m_octree->build(this);
+		}
+		else
+			m_octree = nullptr;
 	}
 
 	bool MeshHitable::hit(const Ray &ray, const float &t_min, const float &t_max, HitRecord &ret) const
 	{
 		HitRecord tmpRec;
 		bool hitAny = false;
-		float closestSoFar = t_max;
-		for (int x = 0; x < m_indices.size(); x += 3)
+
+		//! octree for accelerating intersection detection.
+		if (m_octree != nullptr)
 		{
-			int index1 = m_indices[x + 0];
-			int index2 = m_indices[x + 1];
-			int index3 = m_indices[x + 2];
-			if (triangleHit(ray, t_min, closestSoFar, tmpRec,
-				m_vertices[index1],
-				m_vertices[index2],
-				m_vertices[index3],
-				m_faceNormal[x / 3]))
+			m_octree->visit(ray, t_min, t_max, 
+				[&](unsigned int i1, unsigned int i2, unsigned int i3, float &tMax) -> bool
 			{
-				hitAny = true;
-				closestSoFar = tmpRec.m_t;
-				ret = tmpRec;
+				Vector3D normal = (m_vertices[i2].m_position - m_vertices[i1].m_position)
+					.crossProduct(m_vertices[i3].m_position - m_vertices[i1].m_position);
+				normal.normalize();
+				if (triangleHit(ray, t_min, tMax, tmpRec,
+					m_vertices[i1],
+					m_vertices[i2],
+					m_vertices[i3],
+					normal))
+				{
+					hitAny = true;
+					tMax = tmpRec.m_t;
+					ret = tmpRec;
+					return true;
+				}
+				return false;
+			});
+		}
+		else
+		{
+			//! brute-force algorithm.
+			float closestSoFar = t_max;
+			for (int x = 0; x < m_indices.size(); x += 3)
+			{
+				int index1 = m_indices[x + 0];
+				int index2 = m_indices[x + 1];
+				int index3 = m_indices[x + 2];
+				if (triangleHit(ray, t_min, closestSoFar, tmpRec,
+					m_vertices[index1],
+					m_vertices[index2],
+					m_vertices[index3],
+					m_faceNormal[x / 3]))
+				{
+					hitAny = true;
+					closestSoFar = tmpRec.m_t;
+					ret = tmpRec;
+				}
 			}
 		}
 		return hitAny;

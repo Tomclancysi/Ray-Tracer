@@ -1,6 +1,8 @@
 #ifndef AABB_H
 #define AABB_H
 
+#include <vector>
+
 #include "Ray.h"
 #include "Math/Vector3D.h"
 
@@ -28,8 +30,19 @@ namespace RayTracer
 		Vector3D getMin() const { return m_min; }
 		Vector3D getMax() const { return m_max; }
 
+		bool isInside(const Vector3D &point) const
+		{
+			return (
+				(point.x <= m_max.x && point.x >= m_min.x) &&
+				(point.y <= m_max.y && point.y >= m_min.y) &&
+				(point.z <= m_max.z && point.z >= m_min.z));
+		}
+
+		std::vector<AABB> getEightSubAABB() const;
+
 		bool hit(const Ray &ray, float tmin, float tmax) const
 		{
+			//£¡whether the ray intersects with the box or not.
 			float t0, t1, invD;
 
 			// x

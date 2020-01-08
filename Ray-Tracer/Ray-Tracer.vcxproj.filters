@@ -93,6 +93,9 @@
     <ClCompile Include="RayTracer\MixturePDF.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="RayTracer\Octree.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RayTracer\Math\MathUtils.h">
@@ -174,6 +177,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="RayTracer\MixturePDF.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracer\Octree.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

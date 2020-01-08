@@ -159,10 +159,9 @@ void simpleLightScene()
 	//        Vector3D(3.2, 3.2, 3.2), robotMetal_mat);
 	ModelHitable *person = new ModelHitable("./res/person.obj", Vector3D(+0, +5.3, -0),
 		Vector3D(0.5, 0.5, 0.5), personLambert_mat);
-	//    ModelHitable *dragon = new ModelHitable("./res/dragon.obj", Vector3D(+5,+5,5),
-	//                                           Vector3D(1.0,1.0,1.0),
-	//                                           new Dielectric(2.4f));
-	//    ModelHitable *bunny = new ModelHitable("./res/bunny.obj", Vector3D(+5, +5, 5),
+	ModelHitable *dragon = new ModelHitable("./res/dragon.obj", Vector3D(+5, +5, 5),
+		Vector3D(1.0, 1.0, 1.0), bottle_mat);
+	//ModelHitable *bunny = new ModelHitable("./res/bunny.obj", Vector3D(+5, +5, 5),
 	//        Vector3D(0.6, 0.6, 0.6), bottle_mat);
 	robot->rotate(Vector3D(0, 1, 0), -30.0f);
 	board->rotate(Vector3D(0, 1, 0), 90.0f);
@@ -178,6 +177,7 @@ void simpleLightScene()
 	tracer.addObjects(robot);
 	tracer.addObjects(person);
 	//tracer.addObjects(bunny);
+	tracer.addObjects(dragon);
 	//    m_list.push_back(new Sphere(Vector3D(0, +8.0f, 0), 2.0, new DiffuseLight(
 	//                                    new ConstantTexture(Vector3D(4.0f, 4.0f, 4.0f)))));
 	tracer.setSkybox("./res/skybox0/", ".jpg");
@@ -334,13 +334,13 @@ int main()
 	// initialize.
 	tracer.initialize(800, 600);
 	tracer.setRecursionDepth(50);
-	tracer.setSamplingNums(100);
+	tracer.setSamplingNums(50);
 
 	// create scene.
-	//simpleLightScene();
+	simpleLightScene();
 	//randomScene();
 	//twoSpheresScene();
-	cornellBoxScene();
+	//cornellBoxScene();
 	//finalLightScene();
 	//Camera *camera = tracer.getCamera();
 

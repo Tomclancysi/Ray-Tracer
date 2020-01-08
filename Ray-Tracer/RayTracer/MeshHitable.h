@@ -1,6 +1,7 @@
 #ifndef MESHHITABLE_H
 #define MESHHITABLE_H
 
+#include "Octree.h"
 #include "Hitable.h"
 #include "Transform3D.h"
 
@@ -46,6 +47,8 @@ namespace RayTracer
 		bool triangleHit(const Ray &ray, const float &t_min, const float &t_max,
 			HitRecord &ret, const Vertex &p0, const Vertex &p1,
 			const Vertex &p2, const Vector3D &normal) const;
+
+		Octree::ptr m_octree = nullptr;
 	};
 
 }
