@@ -8,10 +8,12 @@ namespace RayTracer
 		: m_maxDepth(maxDepth)
 	{
 		//! make sure the bounding box is a cube.
-		Vector3D center = (min + max) * 0.5f;
-		float maxEdge = std::max(max.x - min.x, std::max(max.y - min.y, max.z - min.z));
-		m_min = center - Vector3D(maxEdge, maxEdge, maxEdge) * 0.5f;
-		m_max = center + Vector3D(maxEdge, maxEdge, maxEdge) * 0.5f;
+		//Vector3D center = (min + max) * 0.5f;
+		//float maxEdge = std::max(max.x - min.x, std::max(max.y - min.y, max.z - min.z));
+		//m_min = center - Vector3D(maxEdge, maxEdge, maxEdge) * 0.5f;
+		//m_max = center + Vector3D(maxEdge, maxEdge, maxEdge) * 0.5f;
+		m_min = min;
+		m_max = max;
 		m_root = nullptr;
 	}
 

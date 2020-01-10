@@ -111,16 +111,14 @@ namespace RayTracer
 	{
 	private:
 		unsigned int m_emitTex;
+		unsigned int m_albedo;
 
 	public:
 		typedef std::shared_ptr<DiffuseLight> ptr;
 
-		DiffuseLight(unsigned int a) : m_emitTex(a) { }
+		DiffuseLight(unsigned int a, unsigned int b) : m_emitTex(a), m_albedo(b) { }
 
-		virtual bool scatter(const Ray &in, const HitRecord &rec, ScatterRecord &srec) const
-		{
-			return false;
-		}
+		virtual bool scatter(const Ray &in, const HitRecord &rec, ScatterRecord &srec) const;
 
 		virtual Vector3D emitted(const Ray &in, const HitRecord &rec, const float &u,
 			const float &v, const Vector3D &p) const;

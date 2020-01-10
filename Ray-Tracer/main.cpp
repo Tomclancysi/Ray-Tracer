@@ -201,9 +201,11 @@ void cornellBoxScene()
 	unsigned int whiteLambert_mat = matMgr->loadMaterial(new Lambertian(white_unit));
 	unsigned int greenLambert_mat = matMgr->loadMaterial(new Lambertian(green_unit));
 	unsigned int redLambert_mat = matMgr->loadMaterial(new Lambertian(red_unit));
-	unsigned int lightDiffuse_mat = matMgr->loadMaterial(new DiffuseLight(light_unit));
+	unsigned int lightDiffuse_mat = matMgr->loadMaterial(new DiffuseLight(light_unit, green_unit));
+	unsigned int lightDiffuse_mat1 = matMgr->loadMaterial(new DiffuseLight(light_unit, green_unit));
 	unsigned int whiteMetal_mat = matMgr->loadMaterial(new Metal(white_unit, 0.0f));
 	unsigned int bottle_mat = matMgr->loadMaterial(new Dielectric(1.5f));
+	unsigned int board_mat = matMgr->loadMaterial(new Metal(white_unit, 0.0f));
 	//unsigned int diamond_mat = matMgr->loadMaterial(new Dielectric(2.5f));
 
 	Plane *bottom = new Plane(Vector3D(0, 0, 0), Vector3D(5, 5, 5), whiteLambert_mat);
@@ -214,14 +216,17 @@ void cornellBoxScene()
 	Plane *light = new Plane(Vector3D(0, 0, 0), Vector3D(2, 2, 2), lightDiffuse_mat);
 	//Plane *light = new Plane(Vector3D(0,0,0), Vector3D(2,2,2), redLambert_mat);
 	Cube *cube1 = new Cube(Vector3D(-2, 3, -2), Vector3D(1.5, 3.0, 1.5), whiteMetal_mat);
-	Cube *cube2 = new Cube(Vector3D(+1.5, 1.5, +2), Vector3D(1.5, 1.5, 1.5), whiteLambert_mat);
-	Sphere *sphere = new Sphere(Vector3D(+1.5, 4.5, +2), +1.5f, bottle_mat);
-	//Sphere *sphere = new Sphere(Vector3D(+1.5,4.5,+2), +1.5f, lightDiffuse_mat);
+	Cube *cube2 = new Cube(Vector3D(+2.5, 1.5, +2), Vector3D(1.5, 1.5, 1.5), whiteLambert_mat);
+	Sphere *sphere = new Sphere(Vector3D(+2.5, 4.5, +2), +1.5f, bottle_mat);
+	Sphere *sphereLight = new Sphere(Vector3D(+0,0.5,+3.9), +0.5f, lightDiffuse_mat1);
 	//ModelHitable *person = new ModelHitable("./res/person.obj", Vector3D(-2, +5.3, +3),
 	//    Vector3D(0.5, 0.5, 0.5), diamond_mat);
+	ModelHitable *dragon = new ModelHitable("./res/dragon.obj", Vector3D(-1.5, +5, +2.5),
+		Vector3D(0.5, 0.5, 0.5), whiteMetal_mat);
 
 	cube1->rotate(Vector3D(0, 1, 0), +18);
 	cube2->rotate(Vector3D(0, 1, 0), -15);
+	dragon->rotate(Vector3D(0, 1, 0), +25);
 	top->translate(Vector3D(0, 10, 0));
 	back->rotate(Vector3D(1, 0, 0), 90.0f);
 	back->translate(Vector3D(0, 5, -5));
@@ -241,8 +246,11 @@ void cornellBoxScene()
 	tracer.addObjects(right);
 	tracer.addObjects(cube1);
 	tracer.addObjects(cube2);
+	tracer.addObjects(dragon);
 	tracer.addImportantSampling(light);
 	tracer.addImportantSampling(sphere);
+	tracer.addImportantSampling(sphereLight);
+	//tracer.setSkybox("./res/skybox0/", ".jpg");
 	//tracer.addObjects(person);
 
 	Camera *camera = tracer.getCamera();
@@ -271,16 +279,16 @@ void finalLightScene()
 	unsigned int diamond_mat = matMgr->loadMaterial(new Dielectric(1.5f));
 	unsigned int metal_mat = matMgr->loadMaterial(new Metal(gray_unit, 0.1f));
 	unsigned int board_amt = matMgr->loadMaterial(new Lambertian(gray_unit));
-	unsigned int lightDiffuse_mat = matMgr->loadMaterial(new DiffuseLight(yellow_light_unit));
+	unsigned int lightDiffuse_mat = matMgr->loadMaterial(new DiffuseLight(yellow_light_unit, gray_unit));
 	unsigned int stall_mat = matMgr->loadMaterial(new Lambertian(stall_tex));
-	unsigned int white_light_mat = matMgr->loadMaterial(new DiffuseLight(white_light_unit));
+	unsigned int white_light_mat = matMgr->loadMaterial(new DiffuseLight(white_light_unit, gray_unit));
 	unsigned int person_mat = matMgr->loadMaterial(new Lambertian(person_tex));
 	unsigned int light_mat[5];
-	light_mat[0] = matMgr->loadMaterial(new DiffuseLight(light1));
-	light_mat[1] = matMgr->loadMaterial(new DiffuseLight(light2));
-	light_mat[2] = matMgr->loadMaterial(new DiffuseLight(light3));
-	light_mat[3] = matMgr->loadMaterial(new DiffuseLight(light4));
-	light_mat[4] = matMgr->loadMaterial(new DiffuseLight(light5));
+	light_mat[0] = matMgr->loadMaterial(new DiffuseLight(light1, gray_unit));
+	light_mat[1] = matMgr->loadMaterial(new DiffuseLight(light2, gray_unit));
+	light_mat[2] = matMgr->loadMaterial(new DiffuseLight(light3, gray_unit));
+	light_mat[3] = matMgr->loadMaterial(new DiffuseLight(light4, gray_unit));
+	light_mat[4] = matMgr->loadMaterial(new DiffuseLight(light5, gray_unit));
 
 	Plane *plane = new Plane(Vector3D(0, 0, 0), Vector3D(100, 100, 100), board_amt);
 	ModelHitable *person = new ModelHitable("./res/person.obj", Vector3D(-2.0, +5.3, +4.0),
@@ -321,6 +329,7 @@ void finalLightScene()
 	tracer.addImportantSampling(new Sphere(Vector3D(+1.0, +2.2, +1.8), 0.4f, white_light_mat));
 	tracer.addImportantSampling(light);
 	//tracer.setSkybox("./res/skybox1/", ".png");
+	tracer.setSkybox("./res/skybox0/", ".jpg");
 
 	Camera *camera = tracer.getCamera();
 	camera->setPosition(Vector3D(0, 3, 14));
@@ -334,13 +343,13 @@ int main()
 	// initialize.
 	tracer.initialize(800, 600);
 	tracer.setRecursionDepth(50);
-	tracer.setSamplingNums(50);
+	tracer.setSamplingNums(1024);
 
 	// create scene.
-	simpleLightScene();
+	//simpleLightScene();
 	//randomScene();
 	//twoSpheresScene();
-	//cornellBoxScene();
+	cornellBoxScene();
 	//finalLightScene();
 	//Camera *camera = tracer.getCamera();
 

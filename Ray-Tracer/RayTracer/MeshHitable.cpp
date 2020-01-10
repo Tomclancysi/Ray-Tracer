@@ -65,7 +65,7 @@ namespace RayTracer
 		//! if the number of triangles is more than a threshold, build a octree for 
 		if (m_indices.size() > 100 * 3)
 		{
-			m_octree = std::shared_ptr<Octree>(new Octree(minPoint, maxPoint));
+			m_octree = std::shared_ptr<Octree>(new Octree(minPoint, maxPoint, 10));
 			m_octree->build(this);
 		}
 		else

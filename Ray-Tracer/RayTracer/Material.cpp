@@ -77,6 +77,16 @@ namespace RayTracer
 		return true;
 	}
 
+	bool DiffuseLight::scatter(const Ray & in, const HitRecord & rec, ScatterRecord & srec) const
+	{
+		return false;
+		srec.m_isSpecular = false;
+		srec.m_attenuation = TextureMgr::getSingleton()->getTexture(m_albedo)
+			->sample(rec.m_texcoord.x, rec.m_texcoord.y, rec.m_position);
+		srec.m_pdf.reset(new CosinePDF(rec.m_normal));
+		return true;
+	}
+
 	Vector3D DiffuseLight::emitted(const Ray &in, const HitRecord &rec, const float & u,
 		const float & v, const Vector3D & p) const
 	{
