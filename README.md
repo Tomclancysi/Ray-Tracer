@@ -2,7 +2,10 @@
 
 An offline renderer : path tracer. Just a personal toy for learning and playing.
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> f919517f26bd0041b539c807e611383b66068c40
 
 
 ## Features
